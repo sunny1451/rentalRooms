@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Rental Rooms Telangana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e6f0fa, #f5f7fa);
+      color: #333;
+      padding: 40px 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: white;
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 700;
+      color: #1a3c6e;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #3498db, #2980b9);
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .profile-image-section {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .profile-image {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 20px;
+      position: relative;
+      overflow: hidden;
+      border: 4px solid #3498db;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+    }
+
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-image-placeholder {
+      width: 100%;
+      height: 100%;
+      background: #ccc;
+      position: relative;
+    }
+
+    .profile-image-placeholder::before {
+      content: '';
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 60px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .profile-image-placeholder::after {
+      content: '';
+      position: absolute;
+      bottom: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 70px;
+      background: white;
+      border-radius: 50px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .edit-profile-image {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .edit-profile-image:hover {
+      background: linear-gradient(135deg, #2980b9, #1a5276);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-field {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .profile-field label {
+      display: block;
+      font-weight: 600;
+      color: #1a3c6e;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .profile-field input,
+    .profile-field select,
+    .profile-field textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      outline: none;
+      background: #f9f9f9;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-field input:focus,
+    .profile-field select:focus,
+    .profile-field textarea:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 10px rgba(52, 152, 219, 0.2);
+      background: white;
+    }
+
+    .room-selection {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .room-selection .profile-field {
+      flex: 1;
+    }
+
+    .room-images-section {
+      margin-bottom: 50px;
+    }
+
+    .room-images-section h3 {
+      font-size: 28px;
+      color: #1a3c6e;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+
+    .image-upload-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 20px;
+    }
+
+    .image-upload-box {
+      width: 160px;
+      height: 160px;
+      border: 2px dashed #ccc;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: #f9f9f9;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .image-upload-box:hover {
+      border-color: #3498db;
+      transform: scale(1.03);
+    }
+
+    .image-upload-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+    }
+
+    .image-upload-box input {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .gallery-icon::before {
+      content: "📷";
+      font-size: 40px;
+      color: #7f8c8d;
+      transition: color 0.3s ease;
+    }
+
+    .image-upload-box:hover .gallery-icon::before {
+      color: #3498db;
+    }
+
+    .save-button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #f1c40f, #e67e22);
+      color: #1a3c6e;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .save-button:hover {
+      background: linear-gradient(135deg, #d4ac0d, #c0392b);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .save-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h2 {
+        font-size: 28px;
+      }
+
+      .profile-image {
+        width: 120px;
+        height: 120px;
+      }
+
+      .profile-image-placeholder::before {
+        width: 40px;
+        height: 40px;
+      }
+
+      .profile-image-placeholder::after {
+        width: 60px;
+        height: 50px;
+      }
+
+      .room-selection {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .image-upload-box {
+        width: 120px;
+        height: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Your Profile</h2>
+
+    <div class="profile-image-section">
+      <div class="profile-image" id="profileImage">
+        <div class="profile-image-placeholder"></div>
+      </div>
+      <button class="edit-profile-image" onclick="document.getElementById('profileImageInput').click()">Edit Profile Image</button>
+      <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="updateProfileImage(event)">
+    </div>
+
+    <div class="profile-field">
+      <label for="name">Name</label>
+      <input type="text" id="name" placeholder="Enter your name" required oninput="checkRequiredFields()">
+    </div>
+
+    <div class="profile-field">
+      <label for="number">Phone Number</label>
+      <input type="tel" id="number" placeholder="Enter your phone number" required oninput="checkRequiredFields()">
+    </div>
+
+    <div class="profile-field">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required oninput="checkRequiredFields()">
+    </div>
+
+    <div class="profile-field">
+      <label for="address">Room Address</label>
+      <textarea id="address" placeholder="Enter the room address" required oninput="checkRequiredFields()"></textarea>
+    </div>
+
+    <div class="room-selection">
+      <div class="profile-field">
+        <label for="type">Type of Person</label>
+        <select id="type" onchange="toggleRoomType(); checkRequiredFields()" required>
+          <option value="">Select Type</option>
+          <option value="Bachelors">Bachelors</option>
+          <option value="Family">Family</option>
+        </select>
+      </div>
+
+      <div class="profile-field">
+        <label for="roomType">Room Type</label>
+        <select id="roomType" style="display: none;" onchange="updateRoomImages(); checkRequiredFields()" required>
+          <option value="">Select Room Type</option>
+          <option value="1BHK">1BHK</option>
+          <option value="2BHK">2BHK</option>
+          <option value="3BHK">3BHK</option>
+          <option value="General">General Purpose</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="room-images-section" id="roomImagesSection" style="display: none;">
+      <h3>Upload Room Images</h3>
+      <div class="image-upload-grid" id="imageUploadGrid"></div>
+    </div>
+
+    <div class="profile-field" id="rentPriceSection" style="display: none;">
+      <label for="rentPrice">Rent Price (per month, ₹)</label>
+      <input type="number" id="rentPrice" placeholder="Enter rent price per month" required oninput="checkRequiredFields()">
+    </div>
+
+    <button class="save-button" onclick="saveProfile()" disabled>Save Profile</button>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script>
+    // Firebase Initialization
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPoyo6UF4ihYaBQKYWL7FOKKIhO69gZJQ",
+      authDomain: "rentel-rooms.firebaseapp.com",
+      projectId: "rentel-rooms",
+      storageBucket: "rentel-rooms.firebasestorage.app",
+      messagingSenderId: "806555730925",
+      appId: "1:806555730925:web:ccf6bcf172ec6ecc409de4",
+      measurementId: "G-CQWH8ZWP62"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ImageKit Configuration
+    const IMAGEKIT_PRIVATE_KEY = 'private_keidOpgelVBXCjFeq1v6cC3Zh8M=';
+    const IMAGEKIT_PUBLIC_KEY = 'public_kVKXQSuwDPXHQEV2SP1zrkVDgAM='; // Replace with your ImageKit public key
+    const IMAGEKIT_URL_ENDPOINT = 'https://ik.imagekit.io/RentaLRoomS/';
+
+    let profileImageUrl = '';
+    let roomImageUrls = [];
+
+    function checkRequiredFields() {
+      const name = document.getElementById('name').value.trim();
+      const number = document.getElementById('number').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const type = document.getElementById('type').value;
+      const roomType = document.getElementById('roomType').value;
+      const rentPrice = document.getElementById('rentPrice').value;
+      const saveButton = document.querySelector('.save-button');
+      const isValid = name && number && email && address && type && roomType && rentPrice && profileImageUrl && roomImageUrls.every(url => url);
+      saveButton.disabled = !isValid;
+      return isValid;
+    }
+
+    async function uploadToImageKit(file, fileName) {
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('fileName', fileName);
+        formData.append('publicKey', IMAGEKIT_PUBLIC_KEY);
+        formData.append('folder', '/rental_rooms');
+
+        const response = await fetch('https://upload.imagekit.io/api/v1/files/upload', {
+          method: 'POST',
+          headers: {
+            Authorization: `Basic ${btoa(IMAGEKIT_PRIVATE_KEY + ':')}`
+          },
+          body: formData
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`ImageKit upload failed: ${errorText}`);
+        }
+        const data = await response.json();
+        return data.url;
+      } catch (error) {
+        console.error('ImageKit upload error:', error);
+        throw error;
+      }
+    }
+
+    async function updateProfileImage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const name = document.getElementById('name').value.trim() || 'anonymous';
+      try {
+        const fileName = `profile_${name}_${Date.now()}_${file.name}`;
+        profileImageUrl = await uploadToImageKit(file, fileName);
+
+        // Update UI
+        const profileImage = document.getElementById('profileImage');
+        profileImage.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = profileImageUrl;
+        img.alt = 'Profile Image';
+        img.onerror = () => {
+          console.error('Failed to load profile image');
+          profileImage.innerHTML = '<div class="profile-image-placeholder"></div>';
+        };
+        profileImage.appendChild(img);
+
+        checkRequiredFields();
+      } catch (error) {
+        alert('Failed to upload profile image to ImageKit. Please check your network or ImageKit configuration.');
+        document.getElementById('profileImageInput').value = '';
+      }
+    }
+
+    function toggleRoomType() {
+      const type = document.getElementById('type').value;
+      const roomTypeSelect = document.getElementById('roomType');
+      const roomImagesSection = document.getElementById('roomImagesSection');
+      const rentPriceSection = document.getElementById('rentPriceSection');
+
+      roomTypeSelect.style.display = type ? 'block' : 'none';
+      roomImagesSection.style.display = type ? 'block' : 'none';
+      rentPriceSection.style.display = type ? 'block' : 'none';
+
+      if (!type) {
+        document.getElementById('imageUploadGrid').innerHTML = '';
+        roomImageUrls = [];
+      }
+      checkRequiredFields();
+    }
+
+    function updateRoomImages() {
+      const roomType = document.getElementById('roomType').value;
+      const imageUploadGrid = document.getElementById('imageUploadGrid');
+      const roomImagesSection = document.getElementById('roomImagesSection');
+      const rentPriceSection = document.getElementById('rentPriceSection');
+
+      imageUploadGrid.innerHTML = '';
+      roomImagesSection.style.display = roomType ? 'block' : 'none';
+      rentPriceSection.style.display = roomType ? 'block' : 'none';
+
+      let imageCount;
+      switch (roomType) {
+        case '1BHK': imageCount = 4; break;
+        case '2BHK': imageCount = 6; break;
+        case '3BHK': imageCount = 9; break;
+        case 'General': imageCount = 3; break;
+        default: imageCount = 0;
+      }
+
+      roomImageUrls = new Array(imageCount).fill(null);
+      for (let i = 0; i < imageCount; i++) {
+        const uploadBox = document.createElement('div');
+        uploadBox.className = 'image-upload-box';
+        uploadBox.innerHTML = `
+          <span class="gallery-icon"></span>
+          <input type="file" accept="image/*" onchange="updateRoomImage(event, ${i})">
+        `;
+        imageUploadGrid.appendChild(uploadBox);
+      }
+      checkRequiredFields();
+    }
+
+    async function updateRoomImage(event, index) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const name = document.getElementById('name').value.trim() || 'anonymous';
+      try {
+        const fileName = `room_${name}_${index}_${Date.now()}_${file.name}`;
+        roomImageUrls[index] = await uploadToImageKit(file, fileName);
+
+        // Update UI
+        const uploadBox = document.getElementsByClassName('image-upload-box')[index];
+        uploadBox.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = roomImageUrls[index];
+        img.alt = `Room Image ${index + 1}`;
+        img.onerror = () => {
+          console.error(`Failed to load room image at index ${index}`);
+          uploadBox.innerHTML = '<span class="gallery-icon"></span>';
+        };
+        uploadBox.appendChild(img);
+
+        checkRequiredFields();
+      } catch (error) {
+        alert('Failed to upload room image to ImageKit. Please check your network or ImageKit configuration.');
+        event.target.value = '';
+      }
+    }
+
+    async function saveProfile() {
+      const name = document.getElementById('name').value.trim();
+      const number = document.getElementById('number').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const type = document.getElementById('type').value;
+      const roomType = document.getElementById('roomType').value;
+      const rentPrice = document.getElementById('rentPrice').value;
+
+      if (!checkRequiredFields()) {
+        alert('Please fill in all fields and upload all images.');
+        return;
+      }
+
+      try {
+        // Save all details directly to profiles collection with owner's name as document ID
+        const profileRef = db.collection('profiles').doc(name);
+        await profileRef.set({
+          name: name,
+          phoneNumber: number,
+          email: email,
+          address: address,
+          type: type,
+          roomType: roomType,
+          profileImageUrl: profileImageUrl,
+          roomImageUrls: roomImageUrls,
+          rentPrice: parseFloat(rentPrice),
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        alert('Profile saved successfully!');
+        window.location.href = 'success.html';
+      } catch (error) {
+        console.error('Error saving profile to Firestore:', error);
+        alert('An error occurred while saving the profile to Firestore. Please try again.');
+      }
+    }
+  </script>
+</body>
+</html>

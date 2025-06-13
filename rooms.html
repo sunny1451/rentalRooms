@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Available Rooms</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
+    .results-container { padding: 20px; max-width: 1200px; margin: auto; }
+    .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .room-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .room-card img { width: 100%; height: 200px; object-fit: cover; }
+    .room-card-content { padding: 15px; }
+    .room-type { font-size: 14px; font-weight: bold; color: #555; text-transform: uppercase; }
+    .room-title { font-size: 18px; font-weight: bold; margin: 10px 0 5px; color: #333; }
+    .room-location { font-size: 14px; color: #777; margin-bottom: 10px; }
+    .room-details { font-size: 13px; color: #444; line-height: 1.4; margin-bottom: 10px; }
+    .room-price { font-size: 18px; color: #d32f2f; font-weight: bold; margin-bottom: 10px; }
+    .room-contact { display: flex; gap: 15px; margin-bottom: 10px; }
+    .contact-icon { width: 30px; height: 30px; background-size: cover; cursor: pointer; }
+    .phone-icon { background-image: url('https://img.icons8.com/material-sharp/24/000000/phone.png'); }
+    .message-icon { background-image: url('https://img.icons8.com/material-rounded/24/000000/sms.png'); }
+    .book-button { width: 100%; padding: 10px; border: none; background: #4CAF50; color: #fff; font-weight: bold; cursor: pointer; border-radius: 6px; }
+    .book-button:hover { background: #45a049; }
+    .sort-container select { padding: 6px; font-size: 14px; }
+    .error-message { color: red; font-weight: bold; }
+    .loading-message { color: #555; font-style: italic; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <section class="results-container">
+    <div class="results-header">
+      <div>
+        <h2>Available Rooms</h2>
+        <p id="rooms-count">Loading...</p>
+      </div>
+      <div class="sort-container">
+        <label for="sort">Sort by:</label>
+        <select id="sort" onchange="sortRooms()">
+          <option value="price-asc">PRICE: Low to High</option>
+          <option value="price-desc">PRICE: High to Low</option>
+        </select>
+      </div>
+    </div>
+    <div class="room-grid" id="results"><p class="loading-message">Loading rooms...</p></div>
+  </section>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPoyo6UF4ihYaBQKYWL7FOKKIhO69gZJQ",
+      authDomain: "rentel-rooms.firebaseapp.com",
+      projectId: "rentel-rooms",
+      storageBucket: "rentel-rooms.firebasestorage.app",
+      messagingSenderId: "806555730925",
+      appId: "1:806555730925:web:ccf6bcf172ec6ecc409de4",
+      measurementId: "G-CQWH8ZWP62"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let roomsData = [];
+
+    async function loadRooms() {
+      const resultsDiv = document.getElementById('results');
+      const roomsCount = document.getElementById('rooms-count');
+      resultsDiv.innerHTML = '<p class="loading-message">Loading rooms...</p>';
+      roomsData = [];
+
+      try {
+        const snapshot = await getDocs(collection(db, 'profiles'));
+        snapshot.forEach(doc => {
+          const p = doc.data();
+          if (p.name && p.address && p.roomType) {
+            const imageUrl = Array.isArray(p.roomImageUrls) && p.roomImageUrls.length > 0 && p.roomImageUrls[0]
+              ? p.roomImageUrls[0]
+              : 'https://via.placeholder.com/300x200?text=No+Image';
+            roomsData.push({
+              id: doc.id,
+              roomType: p.roomType || 'Unknown',
+              address: p.address || 'Unknown',
+              type: p.type || 'Unknown',
+              phoneNumber: p.phoneNumber || 'N/A',
+              rentPrice: p.rentPrice || 0,
+              imageUrl: imageUrl,
+              extras: Object.entries(p)
+                .filter(([k]) => !['name', 'roomType', 'address', 'type', 'phoneNumber', 'rentPrice', 'roomImageUrls', 'profileImageUrl', 'timestamp'].includes(k))
+                .map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}`)
+                .join('<br>')
+            });
+          }
+        });
+
+        roomsCount.textContent = `${roomsData.length} rooms found`;
+        if (roomsData.length === 0) {
+          resultsDiv.innerHTML = '<p class="error-message">No rooms available.</p>';
+        } else {
+          renderRooms(roomsData);
+        }
+      } catch (error) {
+        console.error('Error loading rooms:', error);
+        resultsDiv.innerHTML = `<p class="error-message">Error: ${error.message}</p>`;
+        roomsCount.textContent = '0 rooms found';
+      }
+    }
+
+    function renderRooms(list) {
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = list.map(r => `
+        <div class="room-card">
+          <img src="${r.imageUrl}" alt="Room Image" onerror="this.src='https://via.placeholder.com/300x200?text=Image+Unavailable'; this.onerror=null;">
+          <div class="room-card-content">
+            <span class="room-type">${r.type}</span>
+            <div class="room-title">${r.roomType} in ${r.address.toUpperCase()}</div>
+            <div class="room-location">${r.address}</div>
+            <div class="room-details">${r.extras}<br>Phone: ${r.phoneNumber}</div>
+            <div class="room-price">₹${r.rentPrice.toLocaleString()}/month</div>
+            <div class="room-contact">
+              <div class="contact-icon phone-icon" onclick="callOwner('${r.phoneNumber}')"></div>
+              <div class="contact-icon message-icon" onclick="messageOwner('${r.phoneNumber}')"></div>
+            </div>
+            <button class="book-button" onclick="bookRoom('${r.phoneNumber}')">Book the House for Rent</button>
+          </div>
+        </div>`).join('');
+    }
+
+    function sortRooms() {
+      const val = document.getElementById('sort').value;
+      const sorted = [...roomsData].sort((a, b) => val === 'price-asc' ? a.rentPrice - b.rentPrice : b.rentPrice - a.rentPrice);
+      renderRooms(sorted);
+    }
+
+    window.callOwner = function(num) {
+      if (num !== 'N/A') window.location.href = `tel:${num}`;
+      else alert('Phone number not available.');
+    }
+
+    window.messageOwner = function(num) {
+      if (num !== 'N/A') window.location.href = `sms:${num}`;
+      else alert('Phone number not available.');
+    }
+
+    window.bookRoom = function(num) {
+      alert(`Booking request sent to: ${num}`);
+    }
+
+    document.addEventListener('DOMContentLoaded', loadRooms);
+  </script>
+</body>
+</html>
