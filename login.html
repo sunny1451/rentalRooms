@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Rooms Telangana - Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: url('https://wallpapercave.com/wp/wp9359283.jpg') no-repeat center center/cover;
+      color: #333;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7));
+      z-index: 1;
+    }
+
+    .signin-container {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .signin-container:hover {
+      transform: translateY(-5px);
+    }
+
+    .signin-container h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a3c6e;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .signin-container h2::after {
+      content: '';
+      width: 50px;
+      height: 4px;
+      background: linear-gradient(90deg, #3498db, #2980b9);
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background: #f9f9f9;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .input-group input:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+      background: #fff;
+    }
+
+    .input-group label {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #7f8c8d;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label {
+      top: -10px;
+      left: 10px;
+      font-size: 12px;
+      color: #3498db;
+      background: #fff;
+      padding: 0 5px;
+    }
+
+    .signin-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .signin-btn:hover {
+      background: linear-gradient(135deg, #2980b9, #1a5276);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .signin-btn:disabled {
+      background: #bdc3c7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .signin-btn .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #fff;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .signin-btn:disabled .spinner {
+      display: block;
+    }
+
+    .signin-btn:disabled span {
+      visibility: hidden;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .message {
+      font-size: 14px;
+      margin-top: 10px;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      display: none;
+    }
+
+    .message.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .error-message {
+      color: #c0392b;
+    }
+
+    .success-message {
+      color: #27ae60;
+    }
+
+    .links {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #7f8c8d;
+    }
+
+    .links a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .links a:hover {
+      color: #2980b9;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .signin-container {
+        padding: 20px;
+        margin: 10px;
+      }
+
+      .signin-container h2 {
+        font-size: 24px;
+      }
+
+      .signin-btn {
+        padding: 12px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="signin-container">
+    <h2>Sign In</h2>
+    <form id="signinForm">
+      <div class="input-group">
+        <input type="email" id="email" placeholder=" " required>
+        <label for="email">Email Address</label>
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" placeholder=" " required minlength="6">
+        <label for="password">Password</label>
+      </div>
+      <button type="submit" class="signin-btn" id="signinBtn">
+        <span>Sign In</span>
+        <div class="spinner"></div>
+      </button>
+      <div class="message error-message" id="errorMessage"></div>
+      <div class="message success-message" id="successMessage"></div>
+    </form>
+    <div class="links">
+      <p>Don't have an account? <a href="../create account/create-account.html">Create Account</a></p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPoyo6UF4ihYaBQKYWL7FOKKIhO69gZJQ",
+      authDomain: "rentel-rooms.firebaseapp.com",
+      projectId: "rentel-rooms",
+      storageBucket: "rentel-rooms.firebasestorage.app",
+      messagingSenderId: "806555730925",
+      appId: "1:806555730925:web:ccf6bcf172ec6ecc409de4",
+      measurementId: "G-CQWH8ZWP62"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const signinForm = document.getElementById('signinForm');
+    const signinBtn = document.getElementById('signinBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    signinForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let email = document.getElementById('email').value.trim();
+      let password = document.getElementById('password').value;
+
+      signinBtn.disabled = true;
+      errorMessage.classList.remove('show');
+      successMessage.classList.remove('show');
+      errorMessage.textContent = '';
+      successMessage.textContent = '';
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        successMessage.textContent = 'Signed in successfully! Redirecting...';
+        successMessage.classList.add('show');
+        setTimeout(() => {
+          window.location.href = '../profile/profile.html';
+        }, 2000);
+      } catch (error) {
+        let message = 'An error occurred. Please try again.';
+        if (error.code === 'auth/user-not-found') {
+          message = 'No user found with this email.';
+        } else if (error.code === 'auth/wrong-password') {
+          message = 'Incorrect password.';
+        } else if (error.code === 'auth/invalid-email') {
+          message = 'Invalid email address.';
+        }
+        errorMessage.textContent = message;
+        errorMessage.classList.add('show');
+        signinBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

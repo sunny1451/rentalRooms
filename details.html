@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Room Details - Rental Rooms Telangana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(180deg, #f5f7fa, #e6f0fa);
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 60px;
+      background: linear-gradient(135deg, #ffffff, #e6f0fa);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 36px;
+      font-weight: 700;
+      color: #1a3c6e;
+      display: flex;
+      align-items: center;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+      color: #3498db;
+    }
+
+    .logo::before {
+      content: "🏠";
+      margin-right: 12px;
+      font-size: 40px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .profile-button {
+      width: 44px;
+      height: 44px;
+      background: #2c3e50;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-button:hover {
+      background: #3498db;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-button::before {
+      content: "👤";
+      font-size: 22px;
+      color: white;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 20px;
+      background: white;
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .hamburger span {
+      width: 100%;
+      height: 3px;
+      background: black;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      z-index: 100;
+    }
+
+    .menu.active {
+      display: block;
+    }
+
+    .menu a {
+      display: block;
+      padding: 10px;
+      color: #1a3c6e;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .menu a:hover {
+      color: #3498db;
+    }
+
+    .details-container {
+      padding: 80px 30px;
+      max-width: 1300px;
+      margin: auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
+      margin-bottom: 50px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .details-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(255, 255, 255, 0.1));
+      pointer-events: none;
+    }
+
+    .image-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+
+    .gallery-image {
+      width: 200px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .gallery-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .room-details {
+      margin-bottom: 40px;
+    }
+
+    .room-details h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a3c6e;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .room-details p, .room-details div {
+      font-size: 16px;
+      color: #444;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    .room-details div::before {
+      margin-right: 8px;
+      font-size: 16px;
+    }
+
+    .room-details .email::before {
+      content: "✉️";
+    }
+
+    .room-details .phone::before {
+      content: "📞";
+    }
+
+    .room-details .location::before {
+      content: "📍";
+    }
+
+    .room-details .price {
+      font-size: 20px;
+      color: #FC4A1A;
+      font-weight: 700;
+    }
+
+    .room-details .availability {
+      font-weight: 600;
+      color: #3498db;
+    }
+
+    .facilities, .house-rules, .additional-info {
+      margin-top: 20px;
+    }
+
+    .facilities h3, .house-rules h3, .additional-info h3 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a3c6e;
+      margin-bottom: 15px;
+    }
+
+    .map-container {
+      margin: 40px 0;
+    }
+
+    .map-container h3 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a3c6e;
+      margin-bottom: 15px;
+    }
+
+    #map-iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-section {
+      margin-top: 40px;
+    }
+
+    .review-section h3 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a3c6e;
+      margin-bottom: 20px;
+    }
+
+    .star-rating {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 20px;
+    }
+
+    .star {
+      font-size: 24px;
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .star.filled {
+      color: #f1c40f;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #e6e6e6;
+      border-radius: 8px;
+      resize: vertical;
+      margin-bottom: 20px;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+    }
+
+    .submit-review {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-review:hover {
+      background: linear-gradient(135deg, #2980b9, #1a5276);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .error-message {
+      color: #c0392b;
+      font-weight: 600;
+      font-size: 18px;
+      text-align: center;
+      margin: 30px 0;
+      background: rgba(192, 57, 43, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 50px;
+      background: linear-gradient(135deg, #2c3e50, #1a3c6e);
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .footer:hover {
+      background: linear-gradient(135deg, #34495e, #2c3e50);
+    }
+
+    @media (max-width: 768px) {
+      .details-container {
+        padding: 50px 20px;
+        margin: 20px 15px;
+      }
+
+      .room-details h2 {
+        font-size: 28px;
+      }
+
+      .gallery-image {
+        width: 150px;
+        height: 100px;
+      }
+
+      #map-iframe {
+        height: 300px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 15px 20px;
+      }
+
+      .logo {
+        font-size: 28px;
+      }
+
+      .logo::before {
+        font-size: 32px;
+      }
+
+      .image-gallery {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .gallery-image {
+        width: 100%;
+        height: 200px;
+      }
+
+      .room-details p, .room-details div {
+        font-size: 14px;
+      }
+
+      .room-details .price {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="logo">RENTAL ROOMS</div>
+      <div class="nav-buttons">
+        <div class="profile-button" onclick="goToProfile()"></div>
+        <div class="hamburger" onclick="toggleMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div class="menu" id="menu">
+        <a href="#" onclick="goToProfile()">Profile</a>
+        <a href="#">FAQs</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="details-container" id="details-container">
+    <div class="image-gallery" id="image-gallery"></div>
+    <div class="room-details" id="room-details">
+      <h2 id="room-title">Loading...</h2>
+      <div class="email">Email: Loading...</div>
+      <div class="phone">Phone: Loading...</div>
+      <div class="location">Address: Loading...</div>
+      <div>Type: <span id="room-type">Loading...</span></div>
+      <div class="price">₹<span id="rent-price">Loading...</span>/month</div>
+      <div class="availability">Availability: <span id="availability">Loading...</span></div>
+      <div class="facilities" id="facilities">
+        <h3>Facilities</h3>
+        <p>Loading...</p>
+      </div>
+      <div class="house-rules" id="house-rules">
+        <h3>House Rules</h3>
+        <p>Loading...</p>
+      </div>
+      <div class="additional-info" id="additional-info">
+        <h3>Additional Info</h3>
+        <p>Loading...</p>
+      </div>
+    </div>
+    <div class="map-container">
+      <h3>Location</h3>
+      <iframe id="map-iframe" src=""></iframe>
+    </div>
+    <div class="review-section">
+      <h3>Leave a Review</h3>
+      <div class="star-rating" id="star-rating">
+        <span class="star" data-value="1">★</span>
+        <span class="star" data-value="2">★</span>
+        <span class="star" data-value="3">★</span>
+        <span class="star" data-value="4">★</span>
+        <span class="star" data-value="5">★</span>
+      </div>
+      <textarea id="feedback" placeholder="Write your feedback here..."></textarea>
+      <button class="submit-review" onclick="submitReview()">Submit Review</button>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">✖</span>
+    <img id="lightbox-image" src="" alt="Room Image">
+  </div>
+
+  <footer class="footer">
+    © 2025 Rental Rooms Telangana Pvt. Ltd. All rights reserved.
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+    import { getFirestore, doc, getDoc, collection, addDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPoyo6UF4ihYaBQKYWL7FOKKIhO69gZJQ",
+      authDomain: "rentel-rooms.firebaseapp.com",
+      projectId: "rentel-rooms",
+      storageBucket: "rentel-rooms.firebasestorage.app",
+      messagingSenderId: "806555730925",
+      appId: "1:806555730925:web:ccf6bcf172ec6ecc409de4",
+      measurementId: "G-CQWH8ZWP62"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function loadRoomDetails() {
+      const params = new URLSearchParams(window.location.search);
+      const roomId = params.get('roomId');
+
+      if (!roomId) {
+        document.getElementById('details-container').innerHTML = '<p class="error-message">Invalid room ID. Please go back and try again.</p>';
+        return;
+      }
+
+      try {
+        const roomDoc = await getDoc(doc(db, 'profiles', roomId));
+        if (!roomDoc.exists()) {
+          document.getElementById('details-container').innerHTML = '<p class="error-message">Room not found.</p>';
+          return;
+        }
+
+        const data = roomDoc.data();
+
+        // Display Images
+        const imageGallery = document.getElementById('image-gallery');
+        const images = Array.isArray(data.roomImageUrls) && data.roomImageUrls.length > 0 ? data.roomImageUrls : [];
+        imageGallery.innerHTML = images.map(img => {
+          const imageUrl = img.includes('ik.imagekit.io') ? `${img}?tr=w-200,h-150` : `https://ik.imagekit.io/RentaLRoomS/${img}?tr=w-200,h-150`;
+          return `<img src="${imageUrl}" alt="${data.roomType}" class="gallery-image" onclick="openLightbox('${imageUrl}')">`;
+        }).join('') || '<p>No images available.</p>';
+
+        // Display Room Details
+        document.getElementById('room-title').textContent = `${data.name}'s ${data.roomType}`.toUpperCase();
+        document.querySelector('.room-details .email').textContent = `Email: ${data.email || 'N/A'}`;
+        document.querySelector('.room-details .phone').textContent = `Phone: ${data.phoneNumber || 'N/A'}`;
+        document.querySelector('.room-details .location').textContent = `Address: ${data.houseNumber || ''}, ${data.street || ''}, ${data.city || ''}`;
+        document.getElementById('room-type').textContent = `${data.type} - ${data.roomType}`;
+        document.getElementById('rent-price').textContent = data.rentPrice ? data.rentPrice.toLocaleString() : 'N/A';
+        document.getElementById('availability').textContent = data.available ? 'Available' : 'Not Available';
+
+        // Facilities, House Rules, Additional Info with type checking
+        const facilities = data.facilities;
+        const houseRules = data.houseRules;
+        document.getElementById('facilities').innerHTML = `<h3>Facilities</h3><p>${Array.isArray(facilities) ? facilities.join(', ') : (facilities || 'Not specified')}</p>`;
+        document.getElementById('house-rules').innerHTML = `<h3>House Rules</h3><p>${Array.isArray(houseRules) ? houseRules.join(', ') : (houseRules || 'Not specified')}</p>`;
+        document.getElementById('additional-info').innerHTML = `<h3>Additional Info</h3><p>${data.additionalInfo || 'Not specified'}</p>`;
+
+        // Display Map
+        const mapIframe = document.getElementById('map-iframe');
+        mapIframe.src = data.googleMapsLink || 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d243647.903892147!2d78.2432255!3d17.4126279!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb99d6f0a6b2b5%3A0x1b2b3c4d5e6f7a8b!2sHyderabad%2C%20Telangana%2C%20India!5e0!3m2!1sen!2sus!4v1630000000000!5m2!1sen!2sus';
+      } catch (error) {
+        console.error('Error loading room details:', error);
+        document.getElementById('details-container').innerHTML = '<p class="error-message">Error loading room details. Please try again.</p>';
+      }
+    }
+
+    // Lightbox Functions
+    window.openLightbox = function(imageUrl) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImage = document.getElementById('lightbox-image');
+      lightboxImage.src = imageUrl.replace('tr=w-200,h-150', 'tr=w-800,h-600');
+      lightbox.style.display = 'flex';
+    }
+
+    window.closeLightbox = function() {
+      document.getElementById('lightbox').style.display = 'none';
+    }
+
+    // Star Rating Logic
+    let rating = 0;
+    const stars = document.querySelectorAll('.star');
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        rating = parseInt(star.getAttribute('data-value'));
+        stars.forEach(s => {
+          s.classList.remove('filled');
+          if (parseInt(s.getAttribute('data-value')) <= rating) {
+            s.classList.add('filled');
+          }
+        });
+      });
+    });
+
+    // Submit Review
+    window.submitReview = async function() {
+      const feedback = document.getElementById('feedback').value.trim();
+      const params = new URLSearchParams(window.location.search);
+      const roomId = params.get('roomId');
+
+      if (!roomId) {
+        alert('Invalid room ID.');
+        return;
+      }
+
+      if (rating === 0) {
+        alert('Please select a star rating.');
+        return;
+      }
+
+      if (!feedback) {
+        alert('Please write your feedback.');
+        return;
+      }
+
+      // Check if user has profile details (simplified check; ideally, use auth)
+      try {
+        const userDoc = await getDoc(doc(db, 'profiles', 'user-profile-id')); // Replace with actual user ID check
+        if (!userDoc.exists() || !userDoc.data().name) {
+          alert('Please complete your profile before submitting a review.');
+          return;
+        }
+
+        await addDoc(collection(db, 'profiles', roomId, 'reviews'), {
+          rating: rating,
+          feedback: feedback,
+          timestamp: new Date().toISOString()
+        });
+
+        alert('Review submitted successfully!');
+        document.getElementById('feedback').value = '';
+        rating = 0;
+        stars.forEach(s => s.classList.remove('filled'));
+      } catch (error) {
+        console.error('Error submitting review:', error);
+        alert('Error submitting review. Please try again.');
+      }
+    }
+
+    function goToProfile() {
+      window.location.href = '../login/login.html';
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      menu.classList.toggle('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadRoomDetails);
+  </script>
+</body>
+</html>

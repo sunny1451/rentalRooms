@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Rooms Telangana - Create Account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: url('https://wallpapercave.com/wp/wp9359283.jpg') no-repeat center center/cover;
+      color: #333;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7));
+      z-index: 1;
+    }
+
+    .register-container {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .register-container:hover {
+      transform: translateY(-5px);
+    }
+
+    .register-container h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a3c6e;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .register-container h2::after {
+      content: '';
+      width: 50px;
+      height: 4px;
+      background: linear-gradient(90deg, #3498db, #2980b9);
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background: #f9f9f9;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .input-group input:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+      background: #fff;
+    }
+
+    .input-group label {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #7f8c8d;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label {
+      top: -10px;
+      left: 10px;
+      font-size: 12px;
+      color: #3498db;
+      background: #fff;
+      padding: 0 5px;
+    }
+
+    .register-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .register-btn:hover {
+      background: linear-gradient(135deg, #2980b9, #1a5276);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .register-btn:disabled {
+      background: #bdc3c7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .register-btn .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #fff;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .register-btn:disabled .spinner {
+      display: block;
+    }
+
+    .register-btn:disabled span {
+      visibility: hidden;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .message {
+      font-size: 14px;
+      margin-top: 10px;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      display: none;
+    }
+
+    .message.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .error-message {
+      color: #c0392b;
+    }
+
+    .success-message {
+      color: #27ae60;
+    }
+
+    .links {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #7f8c8d;
+    }
+
+    .links a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .links a:hover {
+      color: #2980b9;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .register-container {
+        padding: 20px;
+        margin: 10px;
+      }
+
+      .register-container h2 {
+        font-size: 24px;
+      }
+
+      .register-btn {
+        padding: 12px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h2>Create Your Account</h2>
+    <form id="registerForm">
+      <div class="input-group">
+        <input type="email" id="email" placeholder=" " required>
+        <label for="email">Email Address</label>
+      </div>
+      <div class="input-group">
+        <input type="tel" id="phoneNumber" placeholder=" " pattern="[0-9]{10}" required title="Please enter a 10-digit phone number">
+        <label for="phoneNumber">Phone Number</label>
+      </div>
+      <div class="input-group">
+        <input type="date" id="dob" placeholder=" " required>
+        <label for="dob">Date of Birth</label>
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" placeholder=" " required minlength="6">
+        <label for="password">Password</label>
+      </div>
+      <div class="input-group">
+        <input type="password" id="confirmPassword" placeholder=" " required minlength="6">
+        <label for="confirmPassword">Confirm Password</label>
+      </div>
+      <button type="submit" class="register-btn" id="registerBtn">
+        <span>Create Account</span>
+        <div class="spinner"></div>
+      </button>
+      <div class="message error-message" id="errorMessage"></div>
+      <div class="message success-message" id="successMessage"></div>
+    </form>
+    <div class="links">
+      <p>Already have an account? <a href="file:///C:/Users/sunny/OneDrive/Desktop/collage%20project/home/login/login.html">Sign In</a></p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+    import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js';
+    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+    import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPoyo6UF4ihYaBQKYWL7FOKKIhO69gZJQ",
+      authDomain: "rentel-rooms.firebaseapp.com",
+      projectId: "rentel-rooms",
+      storageBucket: "rentel-rooms.firebasestorage.app",
+      messagingSenderId: "806555730925",
+      appId: "1:806555730925:web:ccf6bcf172ec6ecc409de4",
+      measurementId: "G-CQWH8ZWP62"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const registerForm = document.getElementById('registerForm');
+    const registerBtn = document.getElementById('registerBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+      const dob = document.getElementById('dob').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      registerBtn.disabled = true;
+      errorMessage.classList.remove('show');
+      successMessage.classList.remove('show');
+      errorMessage.textContent = '';
+      successMessage.textContent = '';
+
+      // Validate DOB
+      if (!dob) {
+        errorMessage.textContent = 'Please enter your date of birth.';
+        errorMessage.classList.add('show');
+        registerBtn.disabled = false;
+        return;
+      }
+      const dobDate = new Date(dob);
+      const today = new Date();
+      const age = today.getFullYear() - dobDate.getFullYear();
+      const monthDiff = today.getMonth() - dobDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
+        age--;
+      }
+      if (isNaN(dobDate.getTime()) || age < 18) {
+        errorMessage.textContent = 'You must be at least 18 years old.';
+        errorMessage.classList.add('show');
+        registerBtn.disabled = false;
+        return;
+      }
+
+      // Validate password match
+      if (password !== confirmPassword) {
+        errorMessage.textContent = 'Passwords do not match.';
+        errorMessage.classList.add('show');
+        registerBtn.disabled = false;
+        return;
+      }
+
+      // Validate phone number
+      if (!/^[0-9]{10}$/.test(phoneNumber)) {
+        errorMessage.textContent = 'Please enter a valid 10-digit phone number.';
+        errorMessage.classList.add('show');
+        registerBtn.disabled = false;
+        return;
+      }
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        const username = email.split('@')[0].toLowerCase();
+
+        const profileRef = doc(db, 'profiles', user.uid);
+        await setDoc(profileRef, {
+          name: username,
+          email: email,
+          phoneNumber: phoneNumber,
+          dob: dob,
+          address: '',
+          type: '',
+          roomType: '',
+          rentPrice: 0,
+          roomImageUrls: [],
+          timestamp: new Date().toISOString()
+        });
+
+        successMessage.textContent = 'Account created successfully! Redirecting to sign in...';
+        successMessage.classList.add('show');
+
+        setTimeout(() => {
+          window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/collage%20project/home/login/login.html';
+        }, 2000);
+      } catch (error) {
+        let message = 'An error occurred. Please try again.';
+        if (error.code === 'auth/email-already-in-use') {
+          message = 'This email is already registered.';
+        } else if (error.code === 'auth/invalid-email') {
+          message = 'Invalid email address.';
+        } else if (error.code === 'auth/weak-password') {
+          message = 'Password must be at least 6 characters.';
+        } else {
+          message = error.message;
+        }
+
+        errorMessage.textContent = message;
+        errorMessage.classList.add('show');
+        registerBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
